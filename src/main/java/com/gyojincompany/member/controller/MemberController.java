@@ -1,5 +1,7 @@
 package com.gyojincompany.member.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.gyojincompany.member.Constant;
 import com.gyojincompany.member.dao.MemberDao;
+import com.gyojincompany.member.dto.MemberDto;
 
 @Controller
 public class MemberController {
@@ -20,17 +23,28 @@ public class MemberController {
 	@Autowired
 	private MemberDao memberDao;
 	
-//	@Autowired
-//	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-//		this.jdbcTemplate = jdbcTemplate;
-//		Constant.jdbcTemplate = this.jdbcTemplate;
-//	}
-	
 	
 	@RequestMapping(value = "/join")
 	public String join() {
 		return "join";
 	}
+	
+	@RequestMapping(value = "/search")
+	public String search() {
+		return "searchMember";
+	}
+	
+	@RequestMapping(value = "/searchOk")
+	public String searchOk(HttpServletRequest request, Model model) {
+		
+		MemberDto mDto = memberDao.searchMember(request.getParameter("memberid"));
+		model.addAttribute("mDto", mDto);
+		model.addAttribute("result", "1");
+		
+		return "searchMember";
+	}
+	
+	
 	
 	@RequestMapping(value = "/joinOk")
 	public String joinOk(HttpServletRequest request, Model model) {
@@ -46,4 +60,15 @@ public class MemberController {
 		
 		return "redirect:memberlist";
 	}
+	
+	@RequestMapping(value = "/memberlist")
+	public String memberlist(Model model) {
+		
+		List<MemberDto> mDtos = memberDao.searchMembers();
+		model.addAttribute("mDtos", mDtos);
+		
+		return "memberlist";
+	}
+	
+	
 }
