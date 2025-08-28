@@ -14,13 +14,17 @@ import com.gyojincompany.member.dao.MemberDao;
 @Controller
 public class MemberController {
 	
+	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
 	@Autowired
-	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-		Constant.jdbcTemplate = this.jdbcTemplate;
-	}
+	private MemberDao memberDao;
+	
+//	@Autowired
+//	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+//		this.jdbcTemplate = jdbcTemplate;
+//		Constant.jdbcTemplate = this.jdbcTemplate;
+//	}
 	
 	
 	@RequestMapping(value = "/join")
@@ -36,9 +40,8 @@ public class MemberController {
 		String mname = request.getParameter("membername");
 		int mage = Integer.parseInt(request.getParameter("memberage"));
 		
-		MemberDao memberDao = new MemberDao();
+//		MemberDao memberDao = new MemberDao();
 		memberDao.insertMember(mid, mpw, mname, mage);
-		
 		
 		
 		return "redirect:memberlist";
